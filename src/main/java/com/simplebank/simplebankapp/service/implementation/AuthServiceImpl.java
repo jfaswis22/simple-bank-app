@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements IAuthService {
     private final UserRepository userRepository;
+
     @Override
     public SignUpResponse signUp(SignUpRequest signUpRequest) {
         return null;
