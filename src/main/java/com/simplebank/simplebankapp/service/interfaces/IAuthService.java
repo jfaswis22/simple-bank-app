@@ -1,6 +1,10 @@
 package com.simplebank.simplebankapp.service.interfaces;
 
+import com.simplebank.simplebankapp.configuration.security.jwt.AuthResponse;
+import com.simplebank.simplebankapp.configuration.security.jwt.SignInRequest;
+import com.simplebank.simplebankapp.configuration.security.jwt.SignUpRequest;
+
 public interface IAuthService {
-    SignUpResponse signUp(SignUpRequest signUpRequest);
-    SignInResponse signIn(SignInRequest signInRequest);
+    AuthResponse signUp(SignUpRequest signUpRequest);
+    AuthResponse signIn(SignInRequest signInRequest);
 }

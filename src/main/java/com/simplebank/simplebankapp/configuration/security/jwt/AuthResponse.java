@@ -1,4 +1,9 @@
 package com.simplebank.simplebankapp.configuration.security.jwt;
 
-public class AuthResponse {
+import lombok.Builder;
+
+@Builder
+public record AuthResponse(
+        String token
+) {
 }

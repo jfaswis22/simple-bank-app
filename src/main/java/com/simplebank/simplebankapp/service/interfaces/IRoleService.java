@@ -1,6 +1,7 @@
 package com.simplebank.simplebankapp.service.interfaces;
 
 import com.simplebank.simplebankapp.persistence.entity.Role;
+import com.simplebank.simplebankapp.presentation.dto.RoleDTO;
 
 import java.util.List;
 

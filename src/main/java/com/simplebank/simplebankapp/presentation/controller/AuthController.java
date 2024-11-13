@@ -1,5 +1,8 @@
 package com.simplebank.simplebankapp.presentation.controller;
 
+import com.simplebank.simplebankapp.configuration.security.jwt.AuthResponse;
+import com.simplebank.simplebankapp.configuration.security.jwt.SignInRequest;
+import com.simplebank.simplebankapp.configuration.security.jwt.SignUpRequest;
 import com.simplebank.simplebankapp.service.interfaces.IAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -2,6 +2,7 @@ package com.simplebank.simplebankapp.service.implementation;
 
 import com.simplebank.simplebankapp.persistence.entity.User;
 import com.simplebank.simplebankapp.persistence.repository.UserRepository;
+import com.simplebank.simplebankapp.presentation.dto.UserDTO;
 import com.simplebank.simplebankapp.service.interfaces.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,7 @@
 package com.simplebank.simplebankapp.service.implementation;
 
 import com.simplebank.simplebankapp.persistence.entity.Role;
+import com.simplebank.simplebankapp.presentation.dto.RoleDTO;
 import com.simplebank.simplebankapp.service.interfaces.IRoleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
