@@ -1,5 +1,6 @@
 package com.simplebank.simplebankapp.presentation.controller;
 
+import com.simplebank.simplebankapp.service.interfaces.IAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
