@@ -27,6 +27,6 @@ public class Role {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "roles")
-    Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "role")
+    private Set<User> users = new HashSet<>();
 }

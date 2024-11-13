@@ -54,4 +54,12 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(RoleNotFoundException.class)
+    public ResponseEntity<Object> handlerRoleNotFoundException(RoleNotFoundException exception,
+                                                                WebRequest webRequest) {
+
+        ApiResponse apiResponse = new ApiResponse(exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+    }
 }
