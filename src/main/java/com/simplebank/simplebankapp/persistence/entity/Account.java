@@ -1,5 +1,6 @@
 package com.simplebank.simplebankapp.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.simplebank.simplebankapp.util.enums.AccountType;
 import com.simplebank.simplebankapp.util.enums.Status;
 import jakarta.annotation.Nullable;
@@ -35,4 +36,9 @@ public class Account {
     private LocalDateTime createdAt;
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    private User user;
 }
