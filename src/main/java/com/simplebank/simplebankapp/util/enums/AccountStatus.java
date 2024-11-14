@@ -1,6 +1,6 @@
 package com.simplebank.simplebankapp.util.enums;
 
-public enum Status {
+public enum AccountStatus {
     ACTIVE,
     INACTIVE,
     CLOSED

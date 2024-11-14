@@ -8,7 +8,7 @@ import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
 import com.simplebank.simplebankapp.service.exception.AccountNotFoundException;
 import com.simplebank.simplebankapp.service.exception.EmailNotFoundException;
 import com.simplebank.simplebankapp.service.interfaces.IAccountService;
-import com.simplebank.simplebankapp.util.enums.Status;
+import com.simplebank.simplebankapp.util.enums.AccountStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -59,7 +59,7 @@ public class AccountServiceImpl implements IAccountService {
                 .createdAt(LocalDateTime.now())
                 .accountNumber(generateNumberAccount())
                 .balance(BigDecimal.valueOf(0))
-                .status(Status.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .updatedAt(LocalDateTime.now())
                 .currency(accountDTO.currency())
                 .user(userRepository.findByEmail(authentication.getName()).get())

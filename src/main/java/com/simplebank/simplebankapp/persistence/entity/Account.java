@@ -2,7 +2,7 @@ package com.simplebank.simplebankapp.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.simplebank.simplebankapp.util.enums.AccountType;
-import com.simplebank.simplebankapp.util.enums.Status;
+import com.simplebank.simplebankapp.util.enums.AccountStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +31,8 @@ public class Account {
     @Column(nullable = false)
     private String currency;
     @Column(nullable = false)
-    private Status status;
+    @Enumerated(EnumType.STRING)
+    private AccountStatus accountStatus;
     @Column(nullable = false)
     private LocalDateTime createdAt;
     @Column(nullable = false)

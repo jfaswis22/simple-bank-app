@@ -7,7 +7,7 @@ import com.simplebank.simplebankapp.persistence.repository.AccountRepository;
 import com.simplebank.simplebankapp.persistence.repository.RoleRepository;
 import com.simplebank.simplebankapp.persistence.repository.UserRepository;
 import com.simplebank.simplebankapp.util.enums.AccountType;
-import com.simplebank.simplebankapp.util.enums.Status;
+import com.simplebank.simplebankapp.util.enums.AccountStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -112,7 +112,7 @@ public class DataInitializerConfig implements CommandLineRunner {
                         .user(userRepository.findByEmail("sofia@example.com").get())
                         .currency("USD")
                         .updatedAt(LocalDateTime.now())
-                        .status(Status.ACTIVE)
+                        .accountStatus(AccountStatus.ACTIVE)
                         .balance(BigDecimal.valueOf(0))
                         .accountNumber(generateUniqueAccountNumber())
                         .accountType(AccountType.CHECKING)
@@ -122,7 +122,7 @@ public class DataInitializerConfig implements CommandLineRunner {
                 .user(userRepository.findByEmail("alice@example.com").get())
                 .currency("USD")
                 .updatedAt(LocalDateTime.now())
-                .status(Status.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(2500.00))
                 .accountNumber(generateUniqueAccountNumber())
                 .accountType(AccountType.SAVINGS)
@@ -133,7 +133,7 @@ public class DataInitializerConfig implements CommandLineRunner {
                 .user(userRepository.findByEmail("carlos@example.com").get())
                 .currency("EUR")
                 .updatedAt(LocalDateTime.now())
-                .status(Status.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(1500.00))
                 .accountNumber(generateUniqueAccountNumber())
                 .accountType(AccountType.CHECKING)
@@ -144,7 +144,7 @@ public class DataInitializerConfig implements CommandLineRunner {
                 .user(userRepository.findByEmail("laura@example.com").get())
                 .currency("USD")
                 .updatedAt(LocalDateTime.now())
-                .status(Status.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(3000.00))
                 .accountNumber(generateUniqueAccountNumber())
                 .accountType(AccountType.SAVINGS)
@@ -155,7 +155,7 @@ public class DataInitializerConfig implements CommandLineRunner {
                 .user(userRepository.findByEmail("miguel@example.com").get())
                 .currency("GBP")
                 .updatedAt(LocalDateTime.now())
-                .status(Status.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(500.00))
                 .accountNumber(generateUniqueAccountNumber())
                 .accountType(AccountType.CHECKING)
@@ -166,7 +166,7 @@ public class DataInitializerConfig implements CommandLineRunner {
                 .user(userRepository.findByEmail("sofia@example.com").get())
                 .currency("USD")
                 .updatedAt(LocalDateTime.now())
-                .status(Status.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(0))
                 .accountNumber(generateUniqueAccountNumber())
                 .accountType(AccountType.SAVINGS)
@@ -177,7 +177,7 @@ public class DataInitializerConfig implements CommandLineRunner {
                 .user(userRepository.findByEmail("sofia@example.com").get())
                 .currency("USD")
                 .updatedAt(LocalDateTime.now())
-                .status(Status.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(0))
                 .accountNumber(generateUniqueAccountNumber())
                 .accountType(AccountType.SAVINGS)
@@ -188,7 +188,7 @@ public class DataInitializerConfig implements CommandLineRunner {
                 .user(userRepository.findByEmail("sofia@example.com").get())
                 .currency("USD")
                 .updatedAt(LocalDateTime.now())
-                .status(Status.ACTIVE)
+                .accountStatus(AccountStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(0))
                 .accountNumber(generateUniqueAccountNumber())
                 .accountType(AccountType.SAVINGS)
