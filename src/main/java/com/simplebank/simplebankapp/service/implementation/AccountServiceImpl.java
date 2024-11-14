@@ -72,6 +72,7 @@ public class AccountServiceImpl implements IAccountService {
                 .currency(accountDTO.currency())
                 .user(userRepository.findByEmail(authentication.getName()).get())
                 .build();
+
         return accountRepository.save(account);
     }
 
