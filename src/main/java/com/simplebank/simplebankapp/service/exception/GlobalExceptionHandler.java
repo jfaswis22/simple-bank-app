@@ -72,5 +72,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(DniAlreadyExistsException.class)
+    public ResponseEntity<Object> handlerDniAlreadyExistsException(DniAlreadyExistsException exception,
+                                                                  WebRequest webRequest) {
 
+        ApiResponse apiResponse = new ApiResponse(exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.CONFLICT);
+    }
 }
