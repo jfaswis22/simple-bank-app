@@ -1,17 +1,23 @@
 package com.simplebank.simplebankapp.service.implementation;
 
 import com.simplebank.simplebankapp.persistence.entity.Account;
+import com.simplebank.simplebankapp.persistence.entity.Transaction;
 import com.simplebank.simplebankapp.persistence.entity.User;
 import com.simplebank.simplebankapp.persistence.repository.AccountRepository;
+import com.simplebank.simplebankapp.persistence.repository.TransactionRepository;
 import com.simplebank.simplebankapp.persistence.repository.UserRepository;
 import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
+import com.simplebank.simplebankapp.service.exception.AccessDeniedException;
 import com.simplebank.simplebankapp.service.exception.AccountNotFoundException;
 import com.simplebank.simplebankapp.service.exception.EmailNotFoundException;
 import com.simplebank.simplebankapp.service.interfaces.IAccountService;
 import com.simplebank.simplebankapp.util.enums.AccountStatus;
+import com.simplebank.simplebankapp.util.enums.TransactionStatus;
+import com.simplebank.simplebankapp.util.enums.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -23,6 +29,7 @@ import java.util.Random;
 public class AccountServiceImpl implements IAccountService {
     private final AccountRepository accountRepository;
     private final UserRepository userRepository;
+    private final TransactionRepository transactionRepository;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int MAX_CHARACTERS = 24;
@@ -80,7 +87,47 @@ public class AccountServiceImpl implements IAccountService {
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new EmailNotFoundException("The user with email " + authentication.getName() + " was not found"));
 
-        return accountRepository.findAccountByAccountId(id).getBalance();
+        return accountRepository.findAccountByAccountId(id).get().getBalance();
+    }
+
+    @Override
+    @Transactional
+    public void transfer(Long fromAccountId, String accountNumber, BigDecimal amount, Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new EmailNotFoundException("The user with email " + authentication.getName() + " was not found"));
+
+        Account fromAccount = accountRepository.findById(fromAccountId)
+                .orElseThrow(() -> new AccountNotFoundException("The account with id " + fromAccountId + " was not found"));
+
+        Account toAccount = accountRepository.findAccountByAccountNumber(accountNumber)
+                .orElseThrow(() -> new AccountNotFoundException("The account with account number " + accountNumber + " was not found"));
+
+        if (!fromAccount.getUser().getUserId().equals(user.getUserId())) {
+            throw new AccessDeniedException("You do not have permission to perform this operation");
+        }
+
+        if (fromAccount.getBalance().compareTo(amount) < 0) {
+            throw new IllegalArgumentException("Insufficient funds in the source account");
+        }
+
+        fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
+        toAccount.setBalance(toAccount.getBalance().add(amount));
+
+        accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
+
+        Transaction transaction = Transaction.builder()
+                .amount(amount)
+                .transactionType(TransactionType.TRANSFER)
+                .currency(fromAccount.getCurrency())
+                .transactionDate(LocalDateTime.now())
+                .status(TransactionStatus.COMPLETED)
+                .description("Transfer from account " + fromAccount.getAccountNumber() + " to account " + accountNumber)
+                .fromAccountId(fromAccount)
+                .toAccountId(toAccount)
+                .build();
+
+        transactionRepository.save(transaction);
     }
 
     private String generateNumberAccount() {

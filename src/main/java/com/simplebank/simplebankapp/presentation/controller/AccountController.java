@@ -1,6 +1,7 @@
 package com.simplebank.simplebankapp.presentation.controller;
 
 import com.simplebank.simplebankapp.persistence.entity.Account;
+import com.simplebank.simplebankapp.persistence.entity.Transaction;
 import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
 import com.simplebank.simplebankapp.service.interfaces.IAccountService;
 import jakarta.validation.Valid;

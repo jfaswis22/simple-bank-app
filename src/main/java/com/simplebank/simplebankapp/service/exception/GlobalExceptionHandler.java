@@ -80,4 +80,13 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(apiResponse, HttpStatus.CONFLICT);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handlerAccessDeniedException(AccessDeniedException exception,
+                                                                  WebRequest webRequest) {
+
+        ApiResponse apiResponse = new ApiResponse(exception.getMessage(), webRequest.getDescription(false));
+
+        return new ResponseEntity<>(apiResponse, HttpStatus.UNAUTHORIZED);
+    }
 }

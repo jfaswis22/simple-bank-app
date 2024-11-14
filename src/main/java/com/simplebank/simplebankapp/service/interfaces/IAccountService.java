@@ -12,6 +12,6 @@ public interface IAccountService {
     List<Account> findAllAccount(Authentication authentication);
     Account createAccount(AccountDTO accountDTO, Authentication authentication);
     void deleteAccount(Long accountId);
-
     BigDecimal showBalance(Long id, Authentication authentication);
+    void transfer(Long fromAccountId, String accountNumber, BigDecimal amount, Authentication authentication);
 }
