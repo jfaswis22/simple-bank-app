@@ -30,8 +30,14 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public List<Account> findAllAccount() {
-        return null;
+    public List<Account> findAllAccount(Authentication authentication) {
+        if (userRepository.findByEmail(authentication.getName()).isEmpty()) {
+            throw new EmailNotFoundException("The email " + authentication.getName() + " was not found");
+        }
+
+        Long id = userRepository.findByEmail(authentication.getName()).get().getUserId();
+
+        return accountRepository.findAccountsByUserUserId(id);
     }
 
     @Override

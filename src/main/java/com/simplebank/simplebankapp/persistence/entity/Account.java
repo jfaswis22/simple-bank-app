@@ -3,7 +3,6 @@ package com.simplebank.simplebankapp.persistence.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.simplebank.simplebankapp.util.enums.AccountType;
 import com.simplebank.simplebankapp.util.enums.Status;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,7 +23,8 @@ public class Account {
     private Long accountId;
     @Column(nullable = false)
     private String accountNumber;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AccountType accountType;
     @Column(nullable = false)
     private BigDecimal balance;

@@ -8,10 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,5 +22,10 @@ public class AccountController {
     public ResponseEntity<Account> createAccount(@RequestBody @Valid AccountDTO accountDTO,
                                                  Authentication authentication) {
         return new ResponseEntity<>(accountService.createAccount(accountDTO, authentication), HttpStatus.CREATED);
+    }
+
+    @GetMapping(value = "/all")
+    public ResponseEntity<List<Account>> findAllAccount(Authentication authentication) {
+        return new ResponseEntity<>(accountService.findAllAccount(authentication), HttpStatus.OK);
     }
 }

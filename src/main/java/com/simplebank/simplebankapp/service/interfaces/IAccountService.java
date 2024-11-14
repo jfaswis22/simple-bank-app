@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IAccountService {
     Account findAccountByAccountNumber(String accountNumber);
-    List<Account> findAllAccount();
+    List<Account> findAllAccount(Authentication authentication);
     Account createAccount(AccountDTO accountDTO, Authentication authentication);
     Account updateAccount(AccountDTO accountDTO);
     void deleteAccount(String accountNumber);
