@@ -4,6 +4,7 @@ import com.simplebank.simplebankapp.persistence.entity.Account;
 import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
 import org.springframework.security.core.Authentication;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface IAccountService {
@@ -11,4 +12,6 @@ public interface IAccountService {
     List<Account> findAllAccount(Authentication authentication);
     Account createAccount(AccountDTO accountDTO, Authentication authentication);
     void deleteAccount(Long accountId);
+
+    BigDecimal showBalance(Long id, Authentication authentication);
 }

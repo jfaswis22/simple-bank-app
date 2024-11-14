@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -38,5 +39,15 @@ public class AccountController {
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         accountService.deleteAccount(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/balance/{id}")
+    public ResponseEntity<BigDecimal> showBalance(@PathVariable Long id, Authentication authentication) {
+        return new ResponseEntity<>(accountService.showBalance(id, authentication), HttpStatus.OK);
+    }
+
+    @GetMapping("/transactions")
+    public ResponseEntity<List<Transaction>> showTransactions(Authentication authentication) {
+        return new ResponseEntity<>(accountService.showTransactions(authentication), HttpStatus.OK);
     }
 }

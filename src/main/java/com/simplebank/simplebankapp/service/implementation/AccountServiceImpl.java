@@ -1,6 +1,7 @@
 package com.simplebank.simplebankapp.service.implementation;
 
 import com.simplebank.simplebankapp.persistence.entity.Account;
+import com.simplebank.simplebankapp.persistence.entity.User;
 import com.simplebank.simplebankapp.persistence.repository.AccountRepository;
 import com.simplebank.simplebankapp.persistence.repository.UserRepository;
 import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
@@ -72,6 +73,14 @@ public class AccountServiceImpl implements IAccountService {
                 .orElseThrow(() -> new AccountNotFoundException("The account with id " + accountId + " was not found"));
 
         accountRepository.delete(account);
+    }
+
+    @Override
+    public BigDecimal showBalance(Long id, Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new EmailNotFoundException("The user with email " + authentication.getName() + " was not found"));
+
+        return accountRepository.findAccountByAccountId(id).getBalance();
     }
 
     private String generateNumberAccount() {
