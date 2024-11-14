@@ -3,6 +3,7 @@ package com.simplebank.simplebankapp.presentation.controller;
 import com.simplebank.simplebankapp.persistence.entity.Account;
 import com.simplebank.simplebankapp.persistence.entity.Transaction;
 import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
+import com.simplebank.simplebankapp.presentation.dto.TransferDTO;
 import com.simplebank.simplebankapp.service.interfaces.IAccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,5 +51,11 @@ public class AccountController {
     @GetMapping("/transactions")
     public ResponseEntity<List<Transaction>> showTransactions(Authentication authentication) {
         return new ResponseEntity<>(accountService.showTransactions(authentication), HttpStatus.OK);
+    }
+
+    @PostMapping("/transfer")
+    public ResponseEntity<Void> transfer(@RequestBody @Valid TransferDTO transferDTO, Authentication authentication) {
+        accountService.transfer(transferDTO, authentication);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -1,7 +1,9 @@
 package com.simplebank.simplebankapp.service.interfaces;
 
 import com.simplebank.simplebankapp.persistence.entity.Account;
+import com.simplebank.simplebankapp.persistence.entity.Transaction;
 import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
+import com.simplebank.simplebankapp.presentation.dto.TransferDTO;
 import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
@@ -13,5 +15,7 @@ public interface IAccountService {
     Account createAccount(AccountDTO accountDTO, Authentication authentication);
     void deleteAccount(Long accountId);
     BigDecimal showBalance(Long id, Authentication authentication);
-    void transfer(Long fromAccountId, String accountNumber, BigDecimal amount, Authentication authentication);
+    void transfer(TransferDTO transferDTO, Authentication authentication);
+
+    List<Transaction> showTransactions(Authentication authentication);
 }

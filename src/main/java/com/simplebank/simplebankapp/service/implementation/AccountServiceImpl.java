@@ -7,6 +7,7 @@ import com.simplebank.simplebankapp.persistence.repository.AccountRepository;
 import com.simplebank.simplebankapp.persistence.repository.TransactionRepository;
 import com.simplebank.simplebankapp.persistence.repository.UserRepository;
 import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
+import com.simplebank.simplebankapp.presentation.dto.TransferDTO;
 import com.simplebank.simplebankapp.service.exception.AccessDeniedException;
 import com.simplebank.simplebankapp.service.exception.AccountNotFoundException;
 import com.simplebank.simplebankapp.service.exception.EmailNotFoundException;
@@ -92,42 +93,52 @@ public class AccountServiceImpl implements IAccountService {
 
     @Override
     @Transactional
-    public void transfer(Long fromAccountId, String accountNumber, BigDecimal amount, Authentication authentication) {
+    public void transfer(TransferDTO transferDTO, Authentication authentication) {
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new EmailNotFoundException("The user with email " + authentication.getName() + " was not found"));
 
-        Account fromAccount = accountRepository.findById(fromAccountId)
-                .orElseThrow(() -> new AccountNotFoundException("The account with id " + fromAccountId + " was not found"));
+        Account fromAccount = accountRepository.findById(transferDTO.fromAccountId())
+                .orElseThrow(() -> new AccountNotFoundException("The account with id " + transferDTO.fromAccountId() + " was not found"));
 
-        Account toAccount = accountRepository.findAccountByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountNotFoundException("The account with account number " + accountNumber + " was not found"));
+        Account toAccount = accountRepository.findAccountByAccountNumber(transferDTO.accountNumber())
+                .orElseThrow(() -> new AccountNotFoundException("The account with account number " + transferDTO.accountNumber() + " was not found"));
 
         if (!fromAccount.getUser().getUserId().equals(user.getUserId())) {
             throw new AccessDeniedException("You do not have permission to perform this operation");
         }
 
-        if (fromAccount.getBalance().compareTo(amount) < 0) {
+        if (fromAccount.getBalance().compareTo(transferDTO.amount()) < 0) {
             throw new IllegalArgumentException("Insufficient funds in the source account");
         }
 
-        fromAccount.setBalance(fromAccount.getBalance().subtract(amount));
-        toAccount.setBalance(toAccount.getBalance().add(amount));
+        fromAccount.setBalance(fromAccount.getBalance().subtract(transferDTO.amount()));
+        toAccount.setBalance(toAccount.getBalance().add(transferDTO.amount()));
 
         accountRepository.save(fromAccount);
         accountRepository.save(toAccount);
 
         Transaction transaction = Transaction.builder()
-                .amount(amount)
+                .amount(transferDTO.amount())
                 .transactionType(TransactionType.TRANSFER)
                 .currency(fromAccount.getCurrency())
                 .transactionDate(LocalDateTime.now())
                 .status(TransactionStatus.COMPLETED)
-                .description("Transfer from account " + fromAccount.getAccountNumber() + " to account " + accountNumber)
+                .description("Transfer from account " + fromAccount.getAccountNumber() + " to account " + toAccount.getAccountNumber())
                 .fromAccountId(fromAccount)
                 .toAccountId(toAccount)
                 .build();
 
         transactionRepository.save(transaction);
+    }
+
+    @Override
+    public List<Transaction> showTransactions(Authentication authentication) {
+        User user = userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new EmailNotFoundException("The user with email " + authentication.getName() + " was not found"));
+
+        List<Account> userAccounts = accountRepository.findByUser(user);
+
+        return transactionRepository.findByFromAccountIdInOrToAccountIdIn(userAccounts, userAccounts);
     }
 
     private String generateNumberAccount() {
