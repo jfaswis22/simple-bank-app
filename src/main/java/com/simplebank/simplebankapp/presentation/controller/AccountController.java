@@ -33,4 +33,10 @@ public class AccountController {
     public ResponseEntity<Account> findById(@PathVariable Long id) {
         return new ResponseEntity<>(accountService.findAccountById(id), HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        accountService.deleteAccount(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
