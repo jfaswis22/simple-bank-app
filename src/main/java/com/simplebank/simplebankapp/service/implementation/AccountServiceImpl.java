@@ -4,6 +4,7 @@ import com.simplebank.simplebankapp.persistence.entity.Account;
 import com.simplebank.simplebankapp.persistence.repository.AccountRepository;
 import com.simplebank.simplebankapp.persistence.repository.UserRepository;
 import com.simplebank.simplebankapp.presentation.dto.AccountDTO;
+import com.simplebank.simplebankapp.service.exception.AccountNotFoundException;
 import com.simplebank.simplebankapp.service.exception.EmailNotFoundException;
 import com.simplebank.simplebankapp.service.interfaces.IAccountService;
 import com.simplebank.simplebankapp.util.enums.Status;
@@ -24,9 +25,15 @@ public class AccountServiceImpl implements IAccountService {
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int MAX_CHARACTERS = 24;
+
+
     @Override
-    public Account findAccountByAccountNumber(String accountNumber) {
-        return null;
+    public Account findAccountById(Long accountId) {
+        if (accountRepository.findById(accountId).isEmpty()) {
+            throw new AccountNotFoundException("The account with id " + accountId + " was not found");
+        }
+
+        return accountRepository.findById(accountId).get();
     }
 
     @Override
@@ -49,7 +56,7 @@ public class AccountServiceImpl implements IAccountService {
         Account account = Account.builder()
                 .accountType(accountDTO.accountType())
                 .createdAt(LocalDateTime.now())
-                .accountNumber(generarCuenta())
+                .accountNumber(generateNumberAccount())
                 .balance(BigDecimal.valueOf(0))
                 .status(Status.ACTIVE)
                 .updatedAt(LocalDateTime.now())
@@ -60,24 +67,22 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public Account updateAccount(AccountDTO accountDTO) {
-        return null;
+    public void deleteAccount(Long accountId) {
+        Account account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new AccountNotFoundException("The account with id " + accountId + " was not found"));
+
+        accountRepository.delete(account);
     }
 
-    @Override
-    public void deleteAccount(String accountNumber) {
-
-    }
-
-    private String generarCuenta() {
+    private String generateNumberAccount() {
         Random random = new Random();
-        StringBuilder cuenta = new StringBuilder(MAX_CHARACTERS);
+        StringBuilder account = new StringBuilder(MAX_CHARACTERS);
 
         for (int i = 0; i < MAX_CHARACTERS; i++) {
             int index = random.nextInt(CHARACTERS.length());
-            cuenta.append(CHARACTERS.charAt(index));
+            account.append(CHARACTERS.charAt(index));
         }
 
-        return cuenta.toString();
+        return account.toString();
     }
 }

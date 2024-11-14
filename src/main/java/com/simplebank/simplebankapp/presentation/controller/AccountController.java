@@ -28,4 +28,9 @@ public class AccountController {
     public ResponseEntity<List<Account>> findAllAccount(Authentication authentication) {
         return new ResponseEntity<>(accountService.findAllAccount(authentication), HttpStatus.OK);
     }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Account> findById(@PathVariable Long id) {
+        return new ResponseEntity<>(accountService.findAccountById(id), HttpStatus.OK);
+    }
 }

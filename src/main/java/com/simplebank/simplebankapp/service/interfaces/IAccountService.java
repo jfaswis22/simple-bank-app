@@ -7,9 +7,8 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface IAccountService {
-    Account findAccountByAccountNumber(String accountNumber);
+    Account findAccountById(Long accountId);
     List<Account> findAllAccount(Authentication authentication);
     Account createAccount(AccountDTO accountDTO, Authentication authentication);
-    Account updateAccount(AccountDTO accountDTO);
-    void deleteAccount(String accountNumber);
+    void deleteAccount(Long accountId);
 }
