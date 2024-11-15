@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transactions</title>
-    <link rel="stylesheet" href="../static/main.css">
+    <link rel="stylesheet" href="main.css">
 </head>
 <body class="bg-gray-100">
 <div class="max-w-3xl mx-auto mt-8">
@@ -12,9 +12,17 @@
         <div class="text-gray-700 font-medium">
             Bienvenido, <span id="username" class="font-semibold text-gray-900"></span>
         </div>
-        <button id="makeTransaction" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-            Realizar Transacción
-        </button>
+        <div class="flex space-x-4">
+            <button id="makeTransaction" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                Realizar Transacción
+            </button>
+            <button id="createBankAccount" class="px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                Crear Cuenta Bancaria
+            </button>
+            <button id="viewBankAccounts" class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">
+                Ver Cuentas Bancarias
+            </button>
+        </div>
     </div>
     <div class="overflow-x-auto rounded-lg border border-gray-200">
         <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm table-auto" id="transactionsTable">
@@ -83,9 +91,17 @@
     document.getElementById('makeTransaction').addEventListener('click', () => {
         window.location.href = 'transaction.html';
     });
+
+    document.getElementById('createBankAccount').addEventListener('click', () => {
+        window.location.href = 'create_bank_account.html';
+    });
+    document.getElementById('viewBankAccounts').addEventListener('click', () => {
+        window.location.href = 'accounts.html';
+    });
 </script>
 </body>
 </html>
+
 
 
 

@@ -1,10 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Cuentas Bancarias</title>
+    <link rel="stylesheet" href="main.css">
 </head>
-<body>
-$END$
+<body class="bg-gray-100">
+<div class="max-w-3xl mx-auto mt-8">
+    <div class="flex justify-between items-center mb-4">
+        <div class="text-gray-700 font-medium">
+            Bienvenido, <span id="username" class="font-semibold text-gray-900"></span>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm table-auto" id="accountsTable">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Cuenta ID</th>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Tipo</th>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Moneda</th>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Balance</th>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Estado</th>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Creada el</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200" id="accountsBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem('jwt');
+        if (!token) {
+            alert("Token no encontrado o null");
+            window.location.href = 'login.html';
+        }
+
+        fetch('http://localhost:8080/api/v1/user', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(user => {
+                document.getElementById('username').textContent = user.name;
+            })
+            .catch(error => {
+                console.error('Error al obtener el usuario:', error);
+                window.location.href = 'login.html';
+            });
+
+        fetch('http://localhost:8080/api/v1/account/all', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(accounts => {
+                const accountsBody = document.getElementById('accountsBody');
+                if (accounts.length > 0) {
+                    accounts.forEach(account => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-900">${account.accountId}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-700">${account.accountType}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-700">${account.currency}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-700">${account.balance}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-700">${account.accountStatus}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-700">${new Date(account.createdAt).toLocaleString()}</td>
+                    `;
+                        accountsBody.appendChild(row);
+                    });
+                } else {
+                    accountsBody.innerHTML = '<tr><td colspan="6" class="text-center text-gray-500">No tienes cuentas bancarias.</td></tr>';
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener las cuentas bancarias:', error);
+            });
+    });
+</script>
+
 </body>
 </html>

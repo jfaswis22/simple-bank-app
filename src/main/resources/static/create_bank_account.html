@@ -1,10 +1,106 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Create Account</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="main.css">
 </head>
 <body>
-$END$
+<div class="h-screen flex items-center justify-center bg-gray-100">
+    <div class="mx-auto max-w-lg">
+        <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Crear Cuenta Bancaria</h1>
+
+        <p class="mx-auto mt-4 max-w-md text-center text-gray-500">
+        </p>
+
+        <form action="#" class="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+            <p class="text-center text-lg font-medium">Crear una nueva cuenta</p>
+
+            <div>
+                <label for="accountType" class="sr-only">Tipo de Cuenta</label>
+                <div class="relative">
+                    <select
+                            id="accountType"
+                            class="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                    >
+                        <option value="">Seleccionar tipo de cuenta</option>
+                        <option value="SAVINGS">Ahorros</option>
+                        <option value="CHECKING">Corriente</option>
+                    </select>
+                </div>
+            </div>
+
+            <div>
+                <label for="currency" class="sr-only">Moneda</label>
+                <div class="relative">
+                    <select
+                            id="currency"
+                            class="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                    >
+                        <option value="">Seleccionar moneda</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                        <option value="MXN">MXN</option>
+                    </select>
+                </div>
+            </div>
+
+            <button
+                    type="submit"
+                    class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+            >
+                Crear Cuenta
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem('jwt');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const accountType = document.getElementById('accountType').value;
+            const currency = document.getElementById('currency').value;
+
+            if (!accountType || !currency) {
+                alert('Por favor, completa todos los campos.');
+                return;
+            }
+
+            const accountData = {
+                accountType: accountType,
+                currency: currency,
+            };
+
+            fetch('/api/v1/account/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(accountData),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Cuenta creada con éxito.');
+                        window.location.href = 'transactions.html';
+                    } else {
+                        alert('Error al crear la cuenta.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al crear la cuenta:', error);
+                    alert('Error inesperado. Intenta de nuevo.');
+                });
+        });
+    });
+</script>
+
 </body>
 </html>

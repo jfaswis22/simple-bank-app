@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authRequest ->
                         authRequest
                                 .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/login.html", "/register.html", "/transactions.html", "/transaction.html").permitAll()
+                                .requestMatchers("/login.html", "/register.html", "/transactions.html", "/transaction.html", "/create_bank_account.html", "/accounts.html").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(sessionManager ->
                         sessionManager
