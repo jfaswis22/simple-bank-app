@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Transaction</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../static/main.css">
+</head>
+<body>
+<div class="h-screen flex items-center justify-center bg-gray-100">
+    <div class="mx-auto max-w-lg">
+        <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">Transacción</h1>
+
+        <p class="mx-auto mt-4 max-w-md text-center text-gray-500">
+        </p>
+
+        <form action="#" class="mb-0 mt-6 space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8">
+            <p class="text-center text-lg font-medium">Transaction</p>
+
+            <div>
+                <label for="myAccount" class="sr-only">Choose your account</label>
+                <div class="relative">
+                    <select
+                            id="myAccount"
+                            class="w-full rounded-lg border-gray-200 p-4 text-sm shadow-sm"
+                    >
+                        <option value="">Select your account</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label for="accountNumber" class="sr-only">accountNumber</label>
+
+                <div class="relative">
+                    <input
+                            type="text"
+                            id="accountNumber"
+                            class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                            placeholder="Enter account number"
+                    />
+
+                    <span class="absolute inset-y-0 end-0 grid place-content-center px-4">
+          </span>
+                </div>
+            </div>
+            <div>
+                <label for="amount" class="sr-only">amount</label>
+
+                <div class="relative">
+                    <input
+                            type="number"
+                            id="amount"
+                            class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
+                            placeholder="Enter amount"
+                    />
+
+                    <span class="absolute inset-y-0 end-0 grid place-content-center px-4">
+          </span>
+                </div>
+            </div>
+
+            <button
+                    type="submit"
+                    class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+            >
+                Transferir
+            </button>
+        </form>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem('jwt');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        fetch('/api/v1/account/all', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(accounts => {
+                const accountSelect = document.getElementById('myAccount');
+                accounts.forEach(account => {
+                    const option = document.createElement('option');
+                    option.value = account.accountId;
+                    option.textContent = `${account.accountId}`;
+                    accountSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener las cuentas:', error);
+            });
+    });
+
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const token = localStorage.getItem('jwt');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        const fromAccount = document.getElementById('myAccount').value;
+        const toAccount = document.getElementById('accountNumber').value;
+        const amount = document.getElementById('amount').value;
+
+        if (!fromAccount || !toAccount || !amount) {
+            alert('Por favor, completa todos los campos.');
+            return;
+        }
+
+        const transferData = {
+            fromAccountId: fromAccount,
+            accountNumber: toAccount,
+            amount: parseFloat(amount),
+        };
+        console.log(transferData.accountNumber);
+        console.log(transferData.fromAccountId);
+        console.log(transferData.amount);
+
+        fetch('/api/v1/account/transfer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(transferData),
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Transferencia realizada con éxito.');
+                    window.location.href = 'transactions.html';
+                } else {
+                    alert('Error al realizar la transferencia.');
+                }
+            })
+            .catch(error => {
+                console.error('Error al realizar la transferencia:', error);
+                alert('Error inesperado. Intenta de nuevo.');
+            });
+    });
+</script>
+
+</body>
+</html>

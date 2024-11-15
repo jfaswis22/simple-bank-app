@@ -2,12 +2,16 @@ package com.simplebank.simplebankapp.configuration.app;
 
 import com.simplebank.simplebankapp.persistence.entity.Account;
 import com.simplebank.simplebankapp.persistence.entity.Role;
+import com.simplebank.simplebankapp.persistence.entity.Transaction;
 import com.simplebank.simplebankapp.persistence.entity.User;
 import com.simplebank.simplebankapp.persistence.repository.AccountRepository;
 import com.simplebank.simplebankapp.persistence.repository.RoleRepository;
+import com.simplebank.simplebankapp.persistence.repository.TransactionRepository;
 import com.simplebank.simplebankapp.persistence.repository.UserRepository;
 import com.simplebank.simplebankapp.util.enums.AccountType;
 import com.simplebank.simplebankapp.util.enums.AccountStatus;
+import com.simplebank.simplebankapp.util.enums.TransactionStatus;
+import com.simplebank.simplebankapp.util.enums.TransactionType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +30,7 @@ public class DataInitializerConfig implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -194,6 +199,38 @@ public class DataInitializerConfig implements CommandLineRunner {
                 .accountType(AccountType.SAVINGS)
                 .createdAt(LocalDateTime.now())
                 .build());
+
+        transactionRepository.save(Transaction.builder()
+                        .amount(BigDecimal.valueOf(250))
+                        .status(TransactionStatus.COMPLETED)
+                        .fromAccountId(accountRepository.findById(2L).get())
+                        .toAccountId(accountRepository.findById(3L).get())
+                        .transactionDate(LocalDateTime.now())
+                        .transactionType(TransactionType.TRANSFER)
+                        .currency("EUR")
+                        .description("Simple transferencia")
+                        .build());
+        transactionRepository.save(Transaction.builder()
+                .amount(BigDecimal.valueOf(250))
+                .status(TransactionStatus.COMPLETED)
+                .fromAccountId(accountRepository.findById(2L).get())
+                .toAccountId(accountRepository.findById(4L).get())
+                .transactionDate(LocalDateTime.now())
+                .transactionType(TransactionType.TRANSFER)
+                .currency("EUR")
+                .description("Simple transferencia")
+                .build());
+        transactionRepository.save(Transaction.builder()
+                .amount(BigDecimal.valueOf(250))
+                .status(TransactionStatus.COMPLETED)
+                .fromAccountId(accountRepository.findById(2L).get())
+                .toAccountId(accountRepository.findById(5L).get())
+                .transactionDate(LocalDateTime.now())
+                .transactionType(TransactionType.TRANSFER)
+                .currency("EUR")
+                .description("Simple transferencia")
+                .build());
+
     }
 
     private String generateUniqueAccountNumber() {

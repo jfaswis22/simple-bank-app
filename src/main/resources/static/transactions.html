@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions</title>
+    <link rel="stylesheet" href="../static/main.css">
+</head>
+<body class="bg-gray-100">
+<div class="max-w-3xl mx-auto mt-8">
+    <div class="flex justify-between items-center mb-4">
+        <div class="text-gray-700 font-medium">
+            Bienvenido, <span id="username" class="font-semibold text-gray-900"></span>
+        </div>
+        <button id="makeTransaction" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Realizar Transacción
+        </button>
+    </div>
+    <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table class="min-w-full divide-y-2 divide-gray-200 bg-white text-sm table-auto" id="transactionsTable">
+            <thead class="bg-gray-50">
+            <tr>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Monto</th>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Tipo</th>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Fecha</th>
+                <th class="whitespace-nowrap px-4 py-3 font-medium text-gray-900 text-left">Descripción</th>
+            </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200" id="transactionsBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    console.log(localStorage.getItem("jwt"));
+    document.addEventListener("DOMContentLoaded", function() {
+        const token = localStorage.getItem('jwt');
+        if (!token) {
+            alert("Token no encontrado o null");
+            window.location.href = 'login.html';
+        }
+
+        fetch('http://localhost:8080/api/v1/user', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(user => {
+                document.getElementById('username').textContent = user.name;
+            })
+            .catch(error => {
+                console.error('Error al obtener el usuario:', error);
+                window.location.href = 'login.html';
+            });
+
+        fetch('http://localhost:8080/api/v1/account/transactions', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(transactions => {
+                const transactionsBody = document.getElementById('transactionsBody');
+                transactions.forEach(transaction => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-900">${transaction.amount}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-700">${transaction.transactionType}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-700">${transaction.transactionDate}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-gray-700">${transaction.description}</td>
+                `;
+                    transactionsBody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener las transacciones:', error);
+            });
+    });
+    document.getElementById('makeTransaction').addEventListener('click', () => {
+        window.location.href = 'transaction.html';
+    });
+</script>
+</body>
+</html>
+
+
+
+
